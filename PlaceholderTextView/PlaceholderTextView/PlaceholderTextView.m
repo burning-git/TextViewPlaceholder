@@ -52,6 +52,14 @@
 
     
 }
+-(void)setPlaceholderColor:(UIColor *)placeholderColor{
+    PlaceholderLabel.textColor=placeholderColor;
+    _placeholderColor=placeholderColor;
+}
+-(void)setPlaceholderFont:(UIFont *)placeholderFont{
+    PlaceholderLabel.font=placeholderFont;
+    _placeholderFont=placeholderFont;
+}
 
 -(void)DidChange:(NSNotification*)noti{
     

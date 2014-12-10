@@ -10,7 +10,7 @@
 
 
 /**
- *  要是用非 arc。。。。。。／／     -fno-objc-arc
+ *  要是用非 arc。。。。。。／／     -fno-objc-arc        
  */
 @interface PlaceholderTextView : UITextView
 
