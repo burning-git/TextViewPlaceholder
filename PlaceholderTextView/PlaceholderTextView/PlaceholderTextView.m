@@ -60,6 +60,12 @@
     PlaceholderLabel.font=placeholderFont;
     _placeholderFont=placeholderFont;
 }
+-(void)setText:(NSString *)tex{
+    if (tex.length>0) {
+        PlaceholderLabel.hidden=YES;
+    }
+    [super setText:tex];
+}
 
 -(void)DidChange:(NSNotification*)noti{
     
