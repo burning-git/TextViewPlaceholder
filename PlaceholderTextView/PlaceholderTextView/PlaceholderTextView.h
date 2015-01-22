@@ -9,13 +9,22 @@
 #import <UIKit/UIKit.h>
 
 
-/**
- *  要是用非 arc。。。。。。／／     -fno-objc-arc        
- */
+
 @interface PlaceholderTextView : UITextView
 
-@property(copy,nonatomic) NSString *placeholder;
+@property(copy,nonatomic)   NSString *placeholder;
 @property(strong,nonatomic) UIColor *placeholderColor;
 @property(strong,nonatomic) UIFont * placeholderFont;
+
+//更新高度的时候
+@property(assign,nonatomic) float updateHeight;
+
+@property(strong,nonatomic)  UILabel *PlaceholderLabel;
+
+
+-(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void(^)(PlaceholderTextView*))limit;
+
+-(void)addTextViewBeginEvent:(void(^)(PlaceholderTextView*text))begin;
+-(void)addTextViewEndEvent:(void(^)(PlaceholderTextView*text))End;
 
 @end

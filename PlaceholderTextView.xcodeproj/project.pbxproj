@@ -14,7 +14,7 @@
 		66D553D11A35F4CC00560BA4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66D553D01A35F4CC00560BA4 /* Images.xcassets */; };
 		66D553D41A35F4CC00560BA4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 66D553D21A35F4CC00560BA4 /* LaunchScreen.xib */; };
 		66D553E01A35F4CC00560BA4 /* PlaceholderTextViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D553DF1A35F4CC00560BA4 /* PlaceholderTextViewTests.m */; };
-		66D553EC1A35F50900560BA4 /* PlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D553EB1A35F50900560BA4 /* PlaceholderTextView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		66D553EC1A35F50900560BA4 /* PlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D553EB1A35F50900560BA4 /* PlaceholderTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -426,6 +426,7 @@
 				66D553E51A35F4CC00560BA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		66D553E61A35F4CC00560BA4 /* Build configuration list for PBXNativeTarget "PlaceholderTextViewTests" */ = {
 			isa = XCConfigurationList;
@@ -434,6 +435,7 @@
 				66D553E81A35F4CC00560BA4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

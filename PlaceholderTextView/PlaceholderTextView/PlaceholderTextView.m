@@ -9,13 +9,19 @@
 #import "PlaceholderTextView.h"
 
 @interface PlaceholderTextView()<UITextViewDelegate>
-{
-    UILabel *PlaceholderLabel;
-}
+
+//最大长度设置
+@property(assign,nonatomic) NSInteger maxTextLength;
+
+
+@property(copy,nonatomic) id eventBlock;
+@property(copy,nonatomic) id BeginBlock;
+@property(copy,nonatomic) id EndBlock;
+
+
 
 @end
 @implementation PlaceholderTextView
-
 - (id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         [self awakeFromNib];
@@ -28,67 +34,127 @@
    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(DidChange:) name:UITextViewTextDidChangeNotification object:self];
+    
+    //UITextViewTextDidBeginEditingNotification
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewBeginNoti:) name:UITextViewTextDidBeginEditingNotification object:self];
+    
+    //UITextViewTextDidEndEditingNotification
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewEndNoti:) name:UITextViewTextDidEndEditingNotification object:self];
 
     float left=5,top=2,hegiht=30;
     
     self.placeholderColor = [UIColor lightGrayColor];
-    PlaceholderLabel=[[UILabel alloc] initWithFrame:CGRectMake(left, top
+    _PlaceholderLabel=[[UILabel alloc] initWithFrame:CGRectMake(left, top
                                                                , CGRectGetWidth(self.frame)-2*left, hegiht)];
-    PlaceholderLabel.font=self.placeholderFont?self.placeholderFont:self.font;
-    PlaceholderLabel.textColor=self.placeholderColor;
-    [self addSubview:PlaceholderLabel];
-    PlaceholderLabel.text=self.placeholder;
+    _PlaceholderLabel.font=self.placeholderFont?self.placeholderFont:self.font;
+    _PlaceholderLabel.textColor=self.placeholderColor;
+    [self addSubview:_PlaceholderLabel];
+    _PlaceholderLabel.text=self.placeholder;
+    
+    self.maxTextLength=1000;
 
 }
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 -(void)setPlaceholder:(NSString *)placeholder{
     if (placeholder.length == 0 || [placeholder isEqualToString:@""]) {
-        PlaceholderLabel.hidden=YES;
+        _PlaceholderLabel.hidden=YES;
     }
     else
-        PlaceholderLabel.text=placeholder;
+        _PlaceholderLabel.text=placeholder;
     _placeholder=placeholder;
 
     
 }
 -(void)setPlaceholderColor:(UIColor *)placeholderColor{
-    PlaceholderLabel.textColor=placeholderColor;
+    _PlaceholderLabel.textColor=placeholderColor;
     _placeholderColor=placeholderColor;
 }
 -(void)setPlaceholderFont:(UIFont *)placeholderFont{
-    PlaceholderLabel.font=placeholderFont;
+    _PlaceholderLabel.font=placeholderFont;
     _placeholderFont=placeholderFont;
 }
 -(void)setText:(NSString *)tex{
     if (tex.length>0) {
-        PlaceholderLabel.hidden=YES;
+        _PlaceholderLabel.hidden=YES;
     }
     [super setText:tex];
 }
 
+#pragma mark---一些通知
 -(void)DidChange:(NSNotification*)noti{
     
     if (self.placeholder.length == 0 || [self.placeholder isEqualToString:@""]) {
-        PlaceholderLabel.hidden=YES;
+        _PlaceholderLabel.hidden=YES;
     }
     
     if (self.text.length > 0) {
-        PlaceholderLabel.hidden=YES;
+        _PlaceholderLabel.hidden=YES;
     }
     else{
-        PlaceholderLabel.hidden=NO;
+        _PlaceholderLabel.hidden=NO;
     }
     
     
+    if (_eventBlock && self.text.length > self.maxTextLength) {
+        
+        void (^limint)(PlaceholderTextView*text) =_eventBlock;
+        
+        limint(self);
+    }
 }
 
+
+-(void)textViewBeginNoti:(NSNotification*)noti{
+    
+    if (_BeginBlock) {
+        void(^begin)(PlaceholderTextView*text)=_BeginBlock;
+        begin(self);
+    }
+}
+-(void)textViewEndNoti:(NSNotification*)noti{
+ 
+    if (_EndBlock) {
+        void(^end)(PlaceholderTextView*text)=_EndBlock;
+        end(self);
+    }
+}
+
+
+
+#pragma mark----使用block 代理 delegate
+-(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void (^)(PlaceholderTextView *))limit{
+    _maxTextLength=maxLength;
+    
+    if (limit) {
+        _eventBlock=limit;
+
+    }
+}
+
+-(void)addTextViewBeginEvent:(void (^)(PlaceholderTextView *))begin{
+    
+    _BeginBlock=begin;
+}
+
+-(void)addTextViewEndEvent:(void (^)(PlaceholderTextView *))End{
+    _EndBlock=End;
+}
+
+
+
+-(void)setUpdateHeight:(float)updateHeight{
+    
+    CGRect frame=self.frame;
+    frame.size.height=updateHeight;
+    self.frame=frame;
+    _updateHeight=updateHeight;
+}
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [PlaceholderLabel removeFromSuperview];
+    [_PlaceholderLabel removeFromSuperview];
     
-    [super dealloc];
-
 }
 
 @end

@@ -31,10 +31,24 @@
     view.font=[UIFont boldSystemFontOfSize:14];
     view.placeholderFont=[UIFont boldSystemFontOfSize:13];
     view.layer.borderWidth=0.5;
-    view.text=@"123141";
     view.layer.borderColor=[UIColor lightGrayColor].CGColor;
     view.placeholderColor=[UIColor redColor];
     [self.view addSubview:view];
+    
+    [view addMaxTextLengthWithMaxLength:5 andEvent:^(PlaceholderTextView *text) {
+        
+        NSLog(@"----------");
+    }];
+
+    [view addTextViewBeginEvent:^(PlaceholderTextView *text) {
+        NSLog(@"begin");
+    }];
+    
+    [view addTextViewEndEvent:^(PlaceholderTextView *text) {
+        NSLog(@"end");
+    }];
+    //view.layoutManager.allowsNonContiguousLayout=NO;
+   // view.scrollEnabled=NO;
     // Do any additional setup after loading the view, typically from a nib.
 }
 
