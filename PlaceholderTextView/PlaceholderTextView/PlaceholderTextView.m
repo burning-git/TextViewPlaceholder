@@ -7,12 +7,10 @@
 //
 
 #import "PlaceholderTextView.h"
-
 @interface PlaceholderTextView()<UITextViewDelegate>
 
-//最大长度设置
-@property(assign,nonatomic) NSInteger maxTextLength;
 
+@property(assign,nonatomic) float placeholdeWidth;
 
 @property(copy,nonatomic) id eventBlock;
 @property(copy,nonatomic) id BeginBlock;
@@ -42,15 +40,19 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewEndNoti:) name:UITextViewTextDidEndEditingNotification object:self];
 
-    float left=5,top=2,hegiht=30;
+    float left=5,top=0,hegiht=30;
     
+    self.placeholdeWidth=CGRectGetWidth(self.frame)-2*left;
     self.placeholderColor = [UIColor lightGrayColor];
     _PlaceholderLabel=[[UILabel alloc] initWithFrame:CGRectMake(left, top
-                                                               , CGRectGetWidth(self.frame)-2*left, hegiht)];
+                                                               , _placeholdeWidth, hegiht)];
     _PlaceholderLabel.font=self.placeholderFont?self.placeholderFont:self.font;
+    _PlaceholderLabel.numberOfLines=0;
+    _PlaceholderLabel.lineBreakMode=NSLineBreakByCharWrapping;
     _PlaceholderLabel.textColor=self.placeholderColor;
     [self addSubview:_PlaceholderLabel];
     _PlaceholderLabel.text=self.placeholder;
+
     
     self.maxTextLength=1000;
 
@@ -62,11 +64,37 @@
         _PlaceholderLabel.hidden=YES;
     }
     else
+    {
         _PlaceholderLabel.text=placeholder;
-    _placeholder=placeholder;
-
+        _placeholder=placeholder;
+        
+        float  height=  [PlaceholderTextView boundingRectWithSize:CGSizeMake(_placeholdeWidth, MAXFLOAT) withLabel:_placeholder withFont:_PlaceholderLabel.font];
+        if (height>CGRectGetHeight(_PlaceholderLabel.frame) && height< CGRectGetHeight(self.frame)) {
+            
+            CGRect frame=_PlaceholderLabel.frame;
+            frame.size.height=height;
+            _PlaceholderLabel.frame=frame;
+            
+        }
+    }
     
 }
++(float)boundingRectWithSize:(CGSize)size withLabel:(NSString *)label withFont:(UIFont *)font{
+    NSDictionary *attribute = @{NSFontAttributeName:font};
+    
+    // CGSize retSize;
+    CGSize retSize = [label boundingRectWithSize:size
+                                         options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading
+                                      attributes:attribute
+                                         context:nil].size;
+    
+    //  retSize= [label sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
+    
+    return retSize.height;
+    
+}
+
+
 -(void)setPlaceholderColor:(UIColor *)placeholderColor{
     _PlaceholderLabel.textColor=placeholderColor;
     _placeholderColor=placeholderColor;

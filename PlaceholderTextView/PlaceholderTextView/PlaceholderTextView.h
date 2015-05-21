@@ -16,6 +16,12 @@
 @property(strong,nonatomic) UIColor *placeholderColor;
 @property(strong,nonatomic) UIFont * placeholderFont;
 
+
+@property(strong,nonatomic) NSIndexPath * indexPath;
+
+//最大长度设置
+@property(assign,nonatomic) NSInteger maxTextLength;
+
 //更新高度的时候
 @property(assign,nonatomic) float updateHeight;
 
@@ -23,7 +29,6 @@
 
 
 -(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void(^)(PlaceholderTextView*))limit;
-
 -(void)addTextViewBeginEvent:(void(^)(PlaceholderTextView*text))begin;
 -(void)addTextViewEndEvent:(void(^)(PlaceholderTextView*text))End;
 
