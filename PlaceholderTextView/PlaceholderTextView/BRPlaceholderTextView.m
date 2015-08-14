@@ -6,8 +6,8 @@
 //  Copyright (c) 2014年 Burning_git. All rights reserved.
 //
 
-#import "PlaceholderTextView.h"
-@interface PlaceholderTextView()<UITextViewDelegate>
+#import "BRPlaceholderTextView.h"
+@interface BRPlaceholderTextView()<UITextViewDelegate>
 
 
 @property(assign,nonatomic) float placeholdeWidth;
@@ -19,18 +19,15 @@
 
 
 @end
-@implementation PlaceholderTextView
+@implementation BRPlaceholderTextView
 - (id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         [self awakeFromNib];
     }
     return self;
 }
-
-
 - (void)awakeFromNib {
    
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(DidChange:) name:UITextViewTextDidChangeNotification object:self];
     
     //UITextViewTextDidBeginEditingNotification
@@ -53,7 +50,6 @@
     [self addSubview:_PlaceholderLabel];
     _PlaceholderLabel.text=self.placeholder;
 
-    
     self.maxTextLength=1000;
 
 }
@@ -68,7 +64,7 @@
         _PlaceholderLabel.text=placeholder;
         _placeholder=placeholder;
         
-        float  height=  [PlaceholderTextView boundingRectWithSize:CGSizeMake(_placeholdeWidth, MAXFLOAT) withLabel:_placeholder withFont:_PlaceholderLabel.font];
+        float  height=  [BRPlaceholderTextView boundingRectWithSize:CGSizeMake(_placeholdeWidth, MAXFLOAT) withLabel:_placeholder withFont:_PlaceholderLabel.font];
         if (height>CGRectGetHeight(_PlaceholderLabel.frame) && height< CGRectGetHeight(self.frame)) {
             
             CGRect frame=_PlaceholderLabel.frame;
@@ -87,8 +83,6 @@
                                          options:NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading
                                       attributes:attribute
                                          context:nil].size;
-    
-    //  retSize= [label sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:size lineBreakMode:NSLineBreakByWordWrapping];
     
     return retSize.height;
     
@@ -127,7 +121,7 @@
     
     if (_eventBlock && self.text.length > self.maxTextLength) {
         
-        void (^limint)(PlaceholderTextView*text) =_eventBlock;
+        void (^limint)(BRPlaceholderTextView*text) =_eventBlock;
         
         limint(self);
     }
@@ -137,14 +131,14 @@
 -(void)textViewBeginNoti:(NSNotification*)noti{
     
     if (_BeginBlock) {
-        void(^begin)(PlaceholderTextView*text)=_BeginBlock;
+        void(^begin)(BRPlaceholderTextView*text)=_BeginBlock;
         begin(self);
     }
 }
 -(void)textViewEndNoti:(NSNotification*)noti{
  
     if (_EndBlock) {
-        void(^end)(PlaceholderTextView*text)=_EndBlock;
+        void(^end)(BRPlaceholderTextView*text)=_EndBlock;
         end(self);
     }
 }
@@ -152,7 +146,8 @@
 
 
 #pragma mark----使用block 代理 delegate
--(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void (^)(PlaceholderTextView *))limit{
+-(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void (^)(BRPlaceholderTextView *text))limit
+{
     _maxTextLength=maxLength;
     
     if (limit) {
@@ -161,12 +156,12 @@
     }
 }
 
--(void)addTextViewBeginEvent:(void (^)(PlaceholderTextView *))begin{
+-(void)addTextViewBeginEvent:(void (^)(BRPlaceholderTextView *))begin{
     
     _BeginBlock=begin;
 }
 
--(void)addTextViewEndEvent:(void (^)(PlaceholderTextView *))End{
+-(void)addTextViewEndEvent:(void (^)(BRPlaceholderTextView *))End{
     _EndBlock=End;
 }
 
@@ -180,8 +175,10 @@
     _updateHeight=updateHeight;
 }
 -(void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [_PlaceholderLabel removeFromSuperview];
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
 
