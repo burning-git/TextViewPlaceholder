@@ -13,10 +13,6 @@
 @interface BRPlaceholderTextView : UITextView
 
 @property(copy,nonatomic)   NSString *placeholder;
-@property(strong,nonatomic) UIColor *placeholderColor;
-
-@property(strong,nonatomic) UIFont * placeholderFont;
-
 
 @property(strong,nonatomic) NSIndexPath * indexPath;
 
@@ -51,5 +47,26 @@
  *  @param begin <#begin description#>
  */
 -(void)addTextViewEndEvent:(void(^)(BRPlaceholderTextView*text))End;
+
+/**
+ *  设置Placeholder 颜色
+ *
+ *  @param color <#color description#>
+ */
+-(void)setPlaceholderColor:(UIColor*)color;
+
+/**
+ *  设置Placeholder 字体
+ *
+ *  @param font <#font description#>
+ */
+-(void)setPlaceholderFont:(UIFont*)font;
+
+/**
+ *  设置透明度
+ *
+ *  @param opacity <#opacity description#>
+ */
+-(void)setPlaceholderOpacity:(float)opacity;
 
 @end
