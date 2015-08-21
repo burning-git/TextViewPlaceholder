@@ -10,7 +10,10 @@
 @interface BRPlaceholderTextView()<UITextViewDelegate>
 @property(strong,nonatomic) UIColor *placeholder_color;
 @property(strong,nonatomic) UIFont * placeholder_font;
-
+/**
+ *   显示 Placeholder
+ */
+@property(strong,nonatomic,readonly)  UILabel *PlaceholderLabel;
 
 @property(assign,nonatomic) float placeholdeWidth;
 
@@ -54,10 +57,10 @@
     
     [self addSubview:_PlaceholderLabel];
     
-    self.maxTextLength=1000;
-    
     
     [self defaultConfig];
+    
+    
     
 }
 -(void)dealloc{
@@ -75,6 +78,10 @@
 {
     self.placeholder_color = [UIColor lightGrayColor];
     self.placeholder_font  = [UIFont systemFontOfSize:14];
+    self.maxTextLength=1000;
+    self.layoutManager.allowsNonContiguousLayout=NO;
+
+
 }
 
 -(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void (^)(BRPlaceholderTextView *text))limit
@@ -154,6 +161,30 @@
         _PlaceholderLabel.hidden=NO;
     }
     
+    NSString *lang = [[self.nextResponder textInputMode] primaryLanguage]; // 键盘输入模式
+    
+    if ([lang isEqualToString:@"zh-Hans"]) { // 简体中文输入，包括简体拼音，健体五笔，简体手写
+        UITextRange *selectedRange = [self markedTextRange];
+        //获取高亮部分
+        UITextPosition *position = [self positionFromPosition:selectedRange.start offset:0];
+        // 没有高亮选择的字，则对已输入的文字进行字数统计和限制
+        if (!position) {
+            if (self.text.length > self.maxTextLength) {
+                self.text = [self.text substringToIndex:self.maxTextLength];
+            }
+        }
+        // 有高亮选择的字符串，则暂不对文字进行统计和限制
+        else{
+            
+        }
+    }
+    // 中文输入法以外的直接对其统计限制即可，不考虑其他语种情况
+    else{
+        if (self.text.length > self.maxTextLength) {
+             self.text = [ self.text substringToIndex:self.maxTextLength];
+        }
+    }
+    
     
     if (_eventBlock && self.text.length > self.maxTextLength) {
         
@@ -161,6 +192,7 @@
         
         limint(self);
     }
+    
 }
 
 #pragma mark - private method

@@ -22,10 +22,7 @@
 //更新高度的时候
 @property(assign,nonatomic) float updateHeight;
 
-/**
- *   显示 Placeholder 
- */
-@property(strong,nonatomic,readonly)  UILabel *PlaceholderLabel;
+
 
 /**
  *  增加text 长度限制

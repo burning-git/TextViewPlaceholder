@@ -50,7 +50,6 @@
     BRPlaceholderTextView *view=[[BRPlaceholderTextView alloc] initWithFrame:CGRectMake(10, 100, ScreenWidth -10*2, 80)];
     view.placeholder=@"请输入xxxx阿达索朗多吉阿克琉斯的距离卡洛斯大家阿莱克斯多久阿萨德卡拉斯京的卡拉胶上地理课:1231123";
     view.font=[UIFont boldSystemFontOfSize:14];
-//    view.placeholderFont=[UIFont boldSystemFontOfSize:13];
     view.layer.borderColor=[UIColor lightGrayColor].CGColor;
     [self.view addSubview:view];
     
