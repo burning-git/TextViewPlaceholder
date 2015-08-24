@@ -30,7 +30,7 @@
      */
     self.textView.placeholder=@"测试 拖的输出口";
     
-    [self.textView addMaxTextLengthWithMaxLength:8 andEvent:^(BRPlaceholderTextView *text) {
+    [self.textView addMaxTextLengthWithMaxLength:0 andEvent:^(BRPlaceholderTextView *text) {
         
         
         [self.view endEditing:YES];
@@ -55,7 +55,7 @@
     
     [view setPlaceholderColor:[UIColor redColor]];
     [view setPlaceholderOpacity:0.6];
-    [view addMaxTextLengthWithMaxLength:5 andEvent:^(BRPlaceholderTextView *text) {
+    [view addMaxTextLengthWithMaxLength:100 andEvent:^(BRPlaceholderTextView *text) {
         
         NSLog(@"----------");
     }];

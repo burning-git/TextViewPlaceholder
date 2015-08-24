@@ -7,6 +7,8 @@
 //
 
 #import "BRPlaceholderTextView.h"
+#define kTopY 7.0
+#define kLeftX 5.0
 @interface BRPlaceholderTextView()<UITextViewDelegate>
 @property(strong,nonatomic) UIColor *placeholder_color;
 @property(strong,nonatomic) UIFont * placeholder_font;
@@ -46,23 +48,36 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewEndNoti:) name:UITextViewTextDidEndEditingNotification object:self];
     
-    float left=5,top=0,hegiht=30;
+    float left=kLeftX,top=kTopY,hegiht=30;
     
     self.placeholdeWidth=CGRectGetWidth(self.frame)-2*left;
     
     _PlaceholderLabel=[[UILabel alloc] initWithFrame:CGRectMake(left, top
                                                                 , _placeholdeWidth, hegiht)];
+   
     _PlaceholderLabel.numberOfLines=0;
-    _PlaceholderLabel.lineBreakMode=NSLineBreakByCharWrapping;
-    
+    _PlaceholderLabel.lineBreakMode=NSLineBreakByCharWrapping|NSLineBreakByWordWrapping;
     [self addSubview:_PlaceholderLabel];
     
     
     [self defaultConfig];
     
+}
+-(void)layoutSubviews
+{
+    float left=kLeftX,top=kTopY,hegiht=self.bounds.size.height;
+    self.placeholdeWidth=CGRectGetWidth(self.frame)-2*left;
+    CGRect frame=_PlaceholderLabel.frame;
+    frame.origin.x=left;
+    frame.origin.y=top;
+    frame.size.height=hegiht;
+    frame.size.width=self.placeholdeWidth;
+    _PlaceholderLabel.frame=frame;
     
+    [_PlaceholderLabel sizeToFit];
     
 }
+
 -(void)dealloc{
     
     [_PlaceholderLabel removeFromSuperview];
@@ -86,7 +101,11 @@
 
 -(void)addMaxTextLengthWithMaxLength:(NSInteger)maxLength andEvent:(void (^)(BRPlaceholderTextView *text))limit
 {
-    _maxTextLength=maxLength;
+    if (maxLength>0) {
+        
+        _maxTextLength=maxLength;
+
+    }
     
     if (limit) {
         _eventBlock=limit;
@@ -228,14 +247,14 @@
         _PlaceholderLabel.text=placeholder;
         _placeholder=placeholder;
         
-        float  height=  [BRPlaceholderTextView boundingRectWithSize:CGSizeMake(_placeholdeWidth, MAXFLOAT) withLabel:_placeholder withFont:_PlaceholderLabel.font];
-        if (height>CGRectGetHeight(_PlaceholderLabel.frame) && height< CGRectGetHeight(self.frame)) {
-            
-            CGRect frame=_PlaceholderLabel.frame;
-            frame.size.height=height;
-            _PlaceholderLabel.frame=frame;
-            
-        }
+//        float  height=  [BRPlaceholderTextView boundingRectWithSize:CGSizeMake(_placeholdeWidth, MAXFLOAT) withLabel:_placeholder withFont:_PlaceholderLabel.font];
+//        if (height>CGRectGetHeight(_PlaceholderLabel.frame) && height< CGRectGetHeight(self.frame)) {
+//            
+//            CGRect frame=_PlaceholderLabel.frame;
+//            frame.size.height=height;
+//            _PlaceholderLabel.frame=frame;
+//            
+//        }
     }
     
 }
